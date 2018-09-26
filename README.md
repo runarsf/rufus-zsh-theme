@@ -1,5 +1,6 @@
 # rufus-zsh-theme
-A heavyweight, buggy, and intense ( but pretty good-looking ) oh-my-zsh theme.
+A heavyweight, buggy, intense, slow, unoptimized, fun, cool ( and pretty good-looking ) oh-my-zsh theme.
+It also has direct integration with runarsf/rootdo ( in the future )
 
 ## Q ( Literally no users, so I don't have FA questions ):
 #### Why is it so heavyweight?
