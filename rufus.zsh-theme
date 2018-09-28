@@ -27,15 +27,15 @@ ZSH_THEME_GIT_PROMPT_RENAMED="%{$fg[blue]%} ➜"
 ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[magenta]%} ♒"
 ZSH_THEME_GIT_PROMPT_AHEAD="%{$fg[blue]%} |>" # 𝝙
 
-repeatChar() {
+endLine() {
     input="$1"
     for (( i = 0; i < `tput cols`-`pwd | wc -c` - 5; i++ )); do
         printf "$input"
     done
 }
 
-PROMPT='$FG[237]-[ %d ] %{$reset_color%}
-%{$fg[magenta]%}[%c] %{$reset_color%}' # `repeatChar -`
+PROMPT='$FG[237]-[ %d ]`endLine -` %{$reset_color%}
+%{$fg[magenta]%}[%c] %{$reset_color%}'
 RPROMPT='${time}$(git_prompt_info)$(git_prompt_status)$(git_prompt_ahead)%{$reset_color%}'
 
 # local time, color coded by last return code
