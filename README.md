@@ -9,8 +9,10 @@ this should come in a very near future.
 * It determines the length of the line to write as the header relative to the pwd length and a few other parameters, then prints each character out one-by-one. While this action is in progress, your terminal won't be able to execute any other commands. On big terminal windows *(tested on fullscreen 2560x1440 with font size 7)*, this can take from 0.25-1 seconds (also depending on your system). This drastically improves on smaller terminal windows. I'm actively looking into how to solve this problem.
 #### What does the line do?
 * The line after the current pwd is simply for aesthetics, it will resize itself when you change the terminal width or enter a new working directory. This works best with monospaced fonts due to the way it determines the line length.
-#### HELP! {x} does {y} and {y} is bad!
-* Woops, need help with (literally and virtually) **anything**? Submit an issue at [runarsf/rufus-zsh-theme](https://github.com/runarsf/rufus-zsh-theme/issues/new). Alternatively you could stalk me on [Twitter](https://twitter.com/Runar_SF) or [Discord](https://discord.me/shindeiru) *(Rufus#5599)*.
+#### What is `${time}$(git_prompt_info)$(git_prompt_status)$(git_prompt_ahead)$reset_color`?
+* This happens when you terminate the write process. If you press ctrl+c while the theme is trying to write the header, the script won't get all it needs to give you the right output, and instead spits out an unformatted version. To fix this, simply wait for about 1.5-2++ seconds and press ctrl+c.
+#### HELP! {x} does {y} and {y} is bad! 
+* Woops, need help with anything (oh-my-)zsh related? Submit an issue at [runarsf/rufus-zsh-theme](https://github.com/runarsf/rufus-zsh-theme/issues/new). Need help with (literally and virtually) **anything** else? Contact me on [Twitter](https://twitter.com/Runar_SF) or [Discord](https://discord.me/shindeiru) *(Rufus#5599)*.
 
 ## Installation:
 1. Install [zsh](https://en.wikipedia.org/wiki/Z_shell)
