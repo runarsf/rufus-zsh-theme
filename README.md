@@ -6,7 +6,7 @@ this should come in a very near future.
 
 ## Q ( Literally no users, so I don't have FA questions ):
 #### Why is it so heavyweight?
-* It determines the length of the line to write as the header relative to the pwd length and a few other parameters, then prints each character out one-by-one. While this action is in progress, your terminal won't be able to execute any other commands. This drastically improves on smaller terminal windows. I'm looking into how to solve this problem.
+* It determines the length of the line to write as the header relative to the pwd length and a few other parameters, then prints each character out one-by-one. While this action is in progress, your terminal won't be able to execute any other commands. On big terminal windows *(tested on fullscreen 2560x1440 with font size 7)*, this can take from 0.25-1 seconds (also depending on your system). This drastically improves on smaller terminal windows. I'm actively looking into how to solve this problem.
 #### What does the line do?
 * The line after the current pwd is simply for aesthetics, it will resize itself when you change the terminal width or enter a new working directory. This works best with monospaced fonts due to the way it determines the line length.
 #### HELP! {x} does {y} and {y} is bad!
