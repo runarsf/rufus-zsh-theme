@@ -26,4 +26,5 @@ this should come in a very near future.
 
 
 ## Screenshots
-![terminal](image.png "terminal: urxvt")
+![terminalDark](image.png "theme: runarsf/dotfiles")
+![terminalLight](imageLight.png "theme: solarized light")
