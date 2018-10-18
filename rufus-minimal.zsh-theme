@@ -34,8 +34,7 @@ endLine() {
     done
 }
 
-PROMPT='$FG[237]-[ %d ]`endLine -` %{$reset_color%}
-%{$fg[cyan]%}[%{$fg[blue]%}%c%{$fg[cyan]%}] %{$reset_color%}'
+PROMPT='%{$fg[cyan]%}[%{$fg[blue]%}%c%{$fg[cyan]%}] %{$reset_color%}'
 RPROMPT='${time}$(git_prompt_info)$(git_prompt_status)$(git_prompt_ahead)%{$reset_color%}'
 
 # local time, color coded by last return code
