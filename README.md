@@ -12,7 +12,7 @@ this should come in a very near future.
 #### What is `${time}$(git_prompt_info)$(git_prompt_status)$(git_prompt_ahead)$reset_color`?
 * This happens when you terminate the write process. If you press ctrl+c while the theme is trying to write the header, the script won't get all it needs to give you the right output, and instead spits out an unformatted version. To fix this, simply wait for about 1.5-2++ seconds and press ctrl+c.
 #### HELP! {x} does {y} and {y} is bad!
-* Woops, need help with anything (oh-my-)zsh related? Submit an issue at [runarsf/rufus-zsh-theme](https://github.com/runarsf/rufus-zsh-theme/issues/new). Need help with (literally and virtually) **anything** else? Contact me on [Twitter](https://twitter.com/Runar_SF) or [Discord](https://discord.me/shindeiru) *(Rufus#5599)*.
+* Woops, need help with anything (oh-my-)zsh related? Submit an issue at [runarsf/rufus-zsh-theme](https://github.com/runarsf/rufus-zsh-theme/issues/new). Need help with (literally and virtually) **anything** else? Contact me on [Twitter](https://twitter.com/Runar_SF) or [Discord](https://discord.me/shindeiru) *(Rufus#0001)*.
 
 ## Installation:
 1. Install [zsh](https://en.wikipedia.org/wiki/Z_shell)
