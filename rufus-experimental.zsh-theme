@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
-#https://github.com/halfo/lambda-mod-zsh-theme/
+# This is a modified version of the lambda mod zsh theme by halfo.
+# Original can be found here: https://github.com/halfo/lambda-mod-zsh-theme/
 
 local LAMBDA="%(?,%{$fg_bold[green]%}λ,%{$fg_bold[red]%}λ)"
 if [[ "$USER" == "root" ]]; then USERCOLOR="red"; else USERCOLOR="yellow"; fi
@@ -22,7 +23,7 @@ function check_git_prompt_info() {
     fi
 }
 
-function get_right_prompt() {
+function getRightPrompt() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
         echo -n "$(git_prompt_short_sha)%{$reset_color%}"
     else
@@ -36,7 +37,7 @@ PROMPT=$'\n'$LAMBDA'\
  $(check_git_prompt_info)\
 %{$reset_color%}'
 
-RPROMPT='$(get_right_prompt)'
+RPROMPT='$(getRightPrompt)'
 
 # Format for git_prompt_info()
 ZSH_THEME_GIT_PROMPT_PREFIX="@ %{$fg[blue]%} "
