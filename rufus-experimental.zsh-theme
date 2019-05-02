@@ -3,7 +3,9 @@
 # This is a modified version of the lambda mod zsh theme by halfo.
 # Original can be found here: https://github.com/halfo/lambda-mod-zsh-theme/
 
+local USERNAME='asd'
 local LAMBDA="%(?,%{$fg_bold[green]%}λ,%{$fg_bold[red]%}λ)"
+local DIRLEVELS=3
 if [[ "$USER" == "root" ]]; then USERCOLOR="red"; else USERCOLOR="yellow"; fi
 
 # Git sometimes goes into a detached head state. git_prompt_info doesn't
@@ -23,21 +25,22 @@ function check_git_prompt_info() {
     fi
 }
 
-function getRightPrompt() {
+function getUsername() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
-        echo -n "$(git_prompt_short_sha)%{$reset_color%}"
+		echo "$(git_prompt_short_sha)%{$reset_color%}"
     else
-        echo -n "%{$reset_color%}"
+		echo "%{$USER%}%{$reset_color%}"
     fi
 }
 
-PROMPT=$'\n'$LAMBDA'\
- %{$fg_bold[$USERCOLOR]%}%n\
- %{$fg_no_bold[magenta]%}[%'${LAMBDA_MOD_N_DIR_LEVELS:-3}'~]\
+PROMPT=$LAMBDA'\
+ %{$fg_bold[$USERCOLOR]%}\
+$(getUsername)\
+ %{$fg_no_bold[magenta]%}[%'${DIRLEVELS:-3}'~]\
  $(check_git_prompt_info)\
 %{$reset_color%}'
 
-RPROMPT='$(getRightPrompt)'
+RPROMPT=''
 
 # Format for git_prompt_info()
 ZSH_THEME_GIT_PROMPT_PREFIX="@ %{$fg[blue]%} "
@@ -58,5 +61,5 @@ ZSH_THEME_GIT_PROMPT_AHEAD=" %{$fg_bold[white]%}^"
 
 
 # Format for git_prompt_long_sha() and git_prompt_short_sha()
-ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$fg_bold[white]%}[%{$fg_bold[blue]%}"
-ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$fg_bold[white]%}]"
+ZSH_THEME_GIT_PROMPT_SHA_BEFORE="%{$fg_bold[yellow]%}"
+ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$reset_color%}"
