@@ -1,12 +1,16 @@
 #!/usr/bin/env zsh
 
-# This is a modified version of the lambda mod zsh theme by halfo.
-# Original can be found here: https://github.com/halfo/lambda-mod-zsh-theme/
-
-local USERNAME='asd'
+local USERNAME='user'
 local LAMBDA="%(?,%{$fg_bold[green]%}λ,%{$fg_bold[red]%}λ)"
+local DEFAULT_CARET='»'
 local DIRLEVELS=3
-if [[ "$USER" == "root" ]]; then USERCOLOR="red"; else USERCOLOR="yellow"; fi
+if [[ "$USER" == "root" ]]; then
+	USERCOLOR="red"
+	CARET="#"
+else
+	USERCOLOR="yellow"
+	CARET=$DEFAULT_CARET
+fi
 
 # Git sometimes goes into a detached head state. git_prompt_info doesn't
 # return anything in this case. So wrap it in another function and check
@@ -15,13 +19,13 @@ function check_git_prompt_info() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
         if [[ -z $(git_prompt_info 2> /dev/null) ]]; then
             echo "%{$fg[blue]%}detached-head%{$reset_color%}) $(git_prompt_status)
-%{$fg[yellow]%}→ "
+%{$fg[yellow]%}%{$CARET%} "
         else
             echo "$(git_prompt_info 2> /dev/null) $(git_prompt_status)
-%{$fg_bold[cyan]%}→ "
+%{$fg_bold[cyan]%}%{$CARET%} "
         fi
     else
-        echo "%{$fg_bold[cyan]%}→ "
+        echo "%{$fg_bold[cyan]%}%{$CARET%} "
     fi
 }
 
@@ -33,14 +37,19 @@ function getUsername() {
     fi
 }
 
-PROMPT=$LAMBDA'\
- %{$fg_bold[$USERCOLOR]%}\
-$(getUsername)\
- %{$fg_no_bold[magenta]%}[%'${DIRLEVELS:-3}'~]\
- $(check_git_prompt_info)\
-%{$reset_color%}'
+#local current_dir='${PWD/#$HOME/~}'
 
+PROMPT=$LAMBDA'\
+ %{$fg_bold[$USERCOLOR]%}$(getUsername)\
+ %{$fg_no_bold[magenta]%}[%'${DIRLEVELS:-3}'~]\
+ $(check_git_prompt_info)%{$reset_color%}'
 RPROMPT=''
+
+# local time, color coded by last return code
+#time_enabled="%(?.%{$fg[green]%}.%{$fg[red]%})%*%{$reset_color%}"
+#time_disabled="%{$fg[green]%}%*%{$reset_color%}"
+#time=$time_enabled
+#RPROMPT='${time}'
 
 # Format for git_prompt_info()
 ZSH_THEME_GIT_PROMPT_PREFIX="@ %{$fg[blue]%} "
@@ -58,7 +67,6 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg_bold[cyan]%}?"
 
 # Format for git_prompt_ahead()
 ZSH_THEME_GIT_PROMPT_AHEAD=" %{$fg_bold[white]%}^"
-
 
 # Format for git_prompt_long_sha() and git_prompt_short_sha()
 ZSH_THEME_GIT_PROMPT_SHA_BEFORE="%{$fg_bold[yellow]%}"
