@@ -1,6 +1,5 @@
 #!/usr/bin/env zsh
 
-local USERNAME='user'
 local LAMBDA="%(?,%{$fg_bold[green]%}λ,%{$fg_bold[red]%}λ)"
 local DEFAULT_CARET='»'
 local DIRLEVELS=3
@@ -31,25 +30,17 @@ function check_git_prompt_info() {
 
 function getUsername() {
     if git rev-parse --git-dir > /dev/null 2>&1; then
-		echo "$(git_prompt_short_sha)%{$reset_color%}"
+		echo "$(git_prompt_short_sha)"
     else
-		echo "%{$USER%}%{$reset_color%}"
+		echo "$USER"
     fi
 }
-
-#local current_dir='${PWD/#$HOME/~}'
 
 PROMPT=$LAMBDA'\
  %{$fg_bold[$USERCOLOR]%}$(getUsername)\
  %{$fg_no_bold[magenta]%}[%'${DIRLEVELS:-3}'~]\
  $(check_git_prompt_info)%{$reset_color%}'
 RPROMPT=''
-
-# local time, color coded by last return code
-#time_enabled="%(?.%{$fg[green]%}.%{$fg[red]%})%*%{$reset_color%}"
-#time_disabled="%{$fg[green]%}%*%{$reset_color%}"
-#time=$time_enabled
-#RPROMPT='${time}'
 
 # Format for git_prompt_info()
 ZSH_THEME_GIT_PROMPT_PREFIX="@ %{$fg[blue]%} "
