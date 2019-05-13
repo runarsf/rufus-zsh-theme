@@ -21,7 +21,7 @@ function getUsername() {
 
 function decorator() {
 	if [ "$1" = "dashes" ]; then
-		echo -n "-[ %d ]"
+		echo -n "$FG[237]-[ $FG[102]%d $FG[237]]"
 		length=$((`tput cols` - `pwd | wc -c` - 5))
 		myString=$(printf "%${length}s");echo ${myString// /-}
 	fi
@@ -30,9 +30,10 @@ function decorator() {
 # %c = directory
 # %d = long directory
  #%{$fg_no_bold[magenta]%}[%'${DIRLEVELS:-3}'~]\
-PROMPT='$FG[237]$(decorator $RUFUS_DECORATOR) %{$reset_color%}
+PROMPT='$(decorator $RUFUS_DECORATOR) %{$reset_color%}
 $LAMBDA %{$fg[blue]%}$(getUsername) %{$fg[magenta]%}$CARET %{$reset_color%}'
-RPROMPT='$(git_prompt_info)$(git_prompt_status)$(git_prompt_ahead)%{$reset_color%}'
+RPROMPT='$(git_prompt_info)$(git_prompt_status)%{$reset_color%}'
+#RPROMPT='$(git_prompt_info)$(git_prompt_status)$(git_prompt_ahead)%{$reset_color%}'
 
 # local time, color coded by last return code
 time_enabled="%(?.%{$fg[green]%}.%{$fg[red]%})%*%{$reset_color%}"
