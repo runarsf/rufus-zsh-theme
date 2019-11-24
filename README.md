@@ -1,14 +1,28 @@
 # rufus-zsh-theme
-<sup>An oh-my-zsh theme.</sup>
 
-## Installation
-1. Install [zsh](https://en.wikipedia.org/wiki/Z_shell) and [oh-my-zsh](https://ohmyz.sh/)
-2. `git clone https://github.com/runarsf/rufus-zsh-theme`
-3. `chmod +x mklink.sh && ./mklink.sh`
-4. Add or edit the value of `ZSH_THEME` in ~/.zshrc to `ZSH_THEME="rufus[-version]"`
-5. `source ~/.zshrc`
-6. Enjoy!
+> An instant asynchronous theme for [oh-my-](https://github.com/ohmyzsh/ohmyzsh)[zsh](http://zsh.org).
 
-## Screenshots <sub>(newest version looks slightly different)</sub>
-![terminalDark](image.png "theme: runarsf/dotfiles")
-![terminalLight](imageLight.png "theme: solarized light")
+![terminalDark](img/image.png "theme: runarsf/dotfiles")
+
+### Installation
+#### Plugin manager [antibody] (recommended)
+```bash
+antibody bundle runarsf/rufus-zsh-theme
+```
+#### Manual
+```bash
+git clone https://github.com/runarsf/rufus-zsh-theme.git
+
+# symlink (recommended), original .zsh-theme file has to be static
+ln -s $(pwd)/rufus-zsh-theme/rufus.zsh-theme $HOME/.oh-my-zsh/custom/themes/rufus.zsh-theme
+# curl
+curl --output $HOME/.oh-my-zsh/custom/themes/rufus.zsh-theme https://raw.githubusercontent.com/runarsf/rufus-zsh-theme/master/rufus.zsh-theme
+# wget
+wget --directory-prefix=$HOME/.oh-my-zsh/custom/themes/ https://raw.githubusercontent.com/runarsf/rufus-zsh-theme/master/rufus.zsh-theme
+
+# Add this to your ~/.zshrc file
+ZSH_THEME="rufus"
+```
+
+> **rufus-zsh-theme** © [runarsf](https://github.com/runarsf) · Author and maintainer.<br/>
+> Released under the [MIT](https://opensource.org/licenses/mit) [License](https://github.com/runarsf/rufus-zsh-theme/blob/master/LICENSE).
