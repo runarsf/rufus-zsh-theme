@@ -1,3 +1,22 @@
+# vim: set foldmethod=marker foldlevel=0 nomodeline: ft=zsh ts=2 sw=2 sts=2 et fenc=utf-8
+# Tasks {{{
+# TODO: Add return code colour to time
+# TODO: Add colour type to modules (like default, exitcode, vimode)
+# TODO: Add support for zsh vim mode
+#PS1+='${VIMODE}'
+#   '$' for normal insert mode
+#   a big red 'I' for command mode - to me this is 'NOT insert' because red
+#function zle-line-init zle-keymap-select {
+#    DOLLAR='%B%F{green}$%f%b '
+#    GIANT_I='%B%F{red}I%f%b '
+#    VIMODE="${${KEYMAP/vicmd/$GIANT_I}/(main|viins)/$DOLLAR}"
+#    zle reset-prompt
+#}
+#zle -N zle-line-init
+#zle -N zle-keymap-select
+# FIXME: When starting zsh from zsh, you will get two time prompts
+# }}}
+
 # Initialization {{{
 source ${0:A:h}/lib/async.zsh
 autoload -Uz add-zsh-hook
@@ -5,17 +24,32 @@ setopt PROMPT_SUBST
 async_init
 # }}}
 
-RUFUS_DISPLAY_TIME=${RUFUS_DISPLAY_TIME:-1}
-RUFUS_TIME_RIGHT=${RUFUS_TIME_RIGHT:-1}
-RUFUS_TIME_DATE=${RUFUS_TIME_DATE:-0}
-RUFUS_DISPLAY_USER_CONTEXT=${RUFUS_DISPLAY_USER_CONTEXT:-0}
-RUFUS_PROMPT_ICON=${RUFUS_PROMPT_ICON:-} # »
-RUFUS_RIGHT_PROMPT=${RUFUS_RIGHT_PROMPT:-1}
-RUFUS_DISPLAY_PATH=${RUFUS_DISPLAY_PATH:-1}
-RUFUS_PATH_BRACKETS=${RUFUS_PATH_BRACKETS:-1}
-#RUFUS_HORIZONTAL_BAR=${RUFUS_HORIZONTAL_BAR:-0}
+# Config {{{
+() {
+  emulate -L zsh
+  setopt no_unset extended_glob
 
-# function to detect if git has support for --no-optional-locks
+  unset -m 'RUFUS_*'
+
+  : ${RUFUS_MODULE_TIME:=1}
+  : ${RUFUS_MODULE_TIME_DATE:=1}
+  : ${RUFUS_MODULE_USER:=1}
+  : ${RUFUS_MODULE_GIT:=1}
+  : ${RUFUS_MODULE_PATH:=1}
+  : ${RUFUS_MODULE_PATH_BRACKETS:=1}
+  : ${RUFUS_PROMPT_TEXT:=} # »
+  #RUFUS_HORIZONTAL_BAR=${RUFUS_HORIZONTAL_BAR:-0}
+
+  # Modules: os_icon, dir, git_branch, git_status, newline, prompt_char, status, execution_time, context, vi_mode, time, battery, public_ip, internal_ip
+  declare -g RUFUS_LEFT_PROMPT_MODULES=(
+  )
+
+  declare -g RUFUS_RIGHT_PROMPT_MODULES=(
+  )
+}
+# }}}
+
+# Detect if git has support for --no-optional-locks {{{
 rufus_test_git_optional_lock() {
   local git_version=${DEBUG_OVERRIDE_V:-"$(git version | cut -d' ' -f3)"}
   local git_version="$(git version | cut -d' ' -f3)"
@@ -41,16 +75,14 @@ PROMPT='%(?:%F{green}:%F{red})${RUFUS_PROMPT_ICON}'
 
 # Time segment {{{
 rufus_time_segment() {
-  if (( RUFUS_DISPLAY_TIME )); then
-    if (( RUFUS_TIME_DATE )); then
-      print "%D{%f/%m/%y} %D{%L:%M:%S} "
-    else
+  if ${RUFUS_MODULE_TIME["date"]}; then
+      print "%D{%f/%m/%y} "
+  fi
+  if ${RUFUS_MODULE_TIME["time"]}; then
       print "%D{%L:%M:%S} "
-    fi
   fi
 }
-
-if (( RUFUS_TIME_RIGHT )); then
+if test ${RUFUS_MODULE_TIME["position"]} = 'right'; then
   RPROMPT+='%F{green}%B$(rufus_time_segment)'
 else
   PROMPT+='%F{green}%B$(rufus_time_segment)'
@@ -85,9 +117,9 @@ fi
 
 rufus_git_status() {
   cd "$1"
-  
+
   local ref branch lockflag
-  
+
   (( RUFUS_GIT_NOLOCK )) && lockflag="--no-optional-locks"
 
   ref=$(=git $lockflag symbolic-ref --quiet HEAD 2>/tmp/git-errors)
@@ -99,13 +131,13 @@ rufus_git_status() {
   esac
 
   branch=${ref#refs/heads/}
-  
+
   if [[ -n $branch ]]; then
     echo -n "${ZSH_THEME_GIT_PROMPT_PREFIX}${branch}"
 
     local git_status icon
     git_status="$(LC_ALL=C =git $lockflag status 2>&1)"
-    
+
     if [[ "$git_status" =~ 'new file:|deleted:|modified:|renamed:|Untracked files:' ]]; then
       echo -n "$ZSH_THEME_GIT_PROMPT_DIRTY"
     else
