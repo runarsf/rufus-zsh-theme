@@ -6,7 +6,7 @@
 # git:
 # %b => current branch
 # %a => current action (rebase/merge)
-# prompt:
+# prompt expansion (http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html):
 # %F => color dict
 # %f => reset color
 # %~ => current path
@@ -33,18 +33,15 @@ async_init
 # Config {{{
 () {
   emulate -L zsh
-  setopt no_unset extended_glob
+  #setopt no_unset extended_glob
 
   unset -m 'RUFUS_*'
 
   # Modules: os_icon, dir, git_branch, git_status, newline, prompt_char, status, execution_time, context, vi_mode, time, battery, public_ip, internal_ip
-  declare -g RUFUS_LEFT_PROMPT_MODULES=(
+  declare -g RUFUS_PROMPT_MODULES=(
+    async_test
+    newline
     prompt_char
-    async:async_test
-  )
-
-  declare -g RUFUS_RIGHT_PROMPT_MODULES=(
-    async:async_test
   )
 
   : ${RUFUS_PROMPT_CHAR:=»}
@@ -53,65 +50,44 @@ async_init
 # }}}
 # Modules {{{
 async_test () {
-  sleep 2
-  echo -en 'Async job completed.'
+  sleep 1.5
+  echo -en '~async~ '
 }
 prompt_char () {
-  echo -en "${RUFUS_PROMPT_CHAR}"
+  echo -en "${RUFUS_PROMPT_CHAR} "
+}
+newline () {
+  NEWLINE=$'\n'
+  echo -e "
+%E"
 }
 
 # }}}
 # Async prompts {{{
-declare -Ag prompt_data rprompt_data
+declare -Ag prompt_data
 prompt_callback () {
-  async_stop_worker 'prompt'
+  #async_stop_worker 'prompt' # FIXME: Find out when to stop worker.
   local job=$1 code=$2 output=$3 exec_time=$4
-  prompt_data[$job]=$output
+  prompt_data[$job]="${output}"
 
-  PROMPT+="$prompt_data[$job] "
-  zle && zle .reset-prompt
-}
-rprompt_callback () {
-  async_stop_worker 'rprompt'
-  local job=$1 code=$2 output=$3 exec_time=$4
-  rprompt_data[$job]=$output
-
-  RPROMPT+="$rprompt_data[$job] "
+  PROMPT=''
+  for module in ${RUFUS_PROMPT_MODULES[@]}; do
+    PROMPT+="${prompt_data[$module]}"
+  done
+  #PROMPT+="$prompt_data[$job] "
   zle && zle reset-prompt
 }
+
 () {
   async_start_worker 'prompt' -n
   async_register_callback 'prompt' prompt_callback
-  async_start_worker 'rprompt' -n
-  async_register_callback 'rprompt' rprompt_callback
 }
 
 precmd () {
-  PROMPT='%f%b'
-  for module in ${RUFUS_LEFT_PROMPT_MODULES[@]}; do
-    # Check if module is async
-    if [[ $module == async:* ]]; then
-      IFS=':'
-      read -A delimiter <<< "${module}"
-      async_job 'prompt' ${delimiter[2]}
-    else
-      PROMPT+="$(${module}) "
-    fi
+  for module in ${RUFUS_PROMPT_MODULES[@]}; do
+    async_job 'prompt' ${module}
   done
-  PROMPT+='%f%b' # Ensure effects are reset
-
-  RPROMPT='%f%b'
-  for module in ${RUFUS_RIGHT_PROMPT_MODULES[@]}; do
-    # Check if module is async
-    if [[ $module == async:* ]]; then
-      IFS=':'
-      read -A delimiter <<< "${module}"
-      async_job 'rprompt' ${delimiter[2]}
-    else
-      RPROMPT+="$(${module}) "
-    fi
-  done
-  RPROMPT+='%f%b' # Ensure effects are reset
+  #PROMPT+='%f%b' # Ensure effects are reset
 }
 
 # }}}
